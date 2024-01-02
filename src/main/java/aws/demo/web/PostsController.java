@@ -1,13 +1,13 @@
 package aws.demo.web;
 
 import aws.demo.service.PostsService;
+import aws.demo.web.dto.PostsResponseDto;
 import aws.demo.web.dto.PostsSaveRequestDto;
+import aws.demo.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -15,19 +15,25 @@ public class PostsController {
 
     private final PostsService postsService;
 
-    @GetMapping("")
-    public JSONObject home() {
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("message", "success");
-        jsonResponse.put("data", "");
-        return jsonResponse;
-    }
-
     @PostMapping("api/v1/posts")
     public JSONObject save(
             @RequestBody PostsSaveRequestDto requestDto
     ) {
-        JSONObject jsonResponse = postsService.save(requestDto);
-        return jsonResponse;
+        return postsService.save(requestDto);
+    }
+
+    @GetMapping("api/v1/posts")
+    public JSONObject findById(
+            @RequestParam Long id
+    ) {
+        return postsService.findById(id);
+    }
+
+    @PutMapping("api/v1/posts")
+    public JSONObject update(
+            @RequestParam Long id,
+            @RequestBody PostsUpdateRequestDto requestDto
+    ) {
+        return postsService.update(id, requestDto);
     }
 }
