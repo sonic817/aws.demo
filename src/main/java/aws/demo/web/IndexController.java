@@ -1,6 +1,7 @@
 package aws.demo.web;
 
 import aws.demo.service.PostsService;
+import aws.demo.web.dto.PostsListResponseDto;
 import aws.demo.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -19,7 +20,7 @@ public class IndexController {
     @GetMapping("")
     public String index(Model model) {
         JSONObject jsonResponse = postsService.findAllDesc();
-        List<PostsResponseDto> PostsList = (List<PostsResponseDto>) jsonResponse.get("data");
+        List<PostsListResponseDto> PostsList = (List<PostsListResponseDto>) jsonResponse.get("data");
         model.addAttribute("posts", PostsList);
         return "index";
     }

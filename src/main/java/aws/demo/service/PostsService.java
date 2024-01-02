@@ -2,6 +2,7 @@ package aws.demo.service;
 
 import aws.demo.domain.Posts.Posts;
 import aws.demo.domain.Posts.PostsRepository;
+import aws.demo.web.dto.PostsListResponseDto;
 import aws.demo.web.dto.PostsResponseDto;
 import aws.demo.web.dto.PostsSaveRequestDto;
 import aws.demo.web.dto.PostsUpdateRequestDto;
@@ -89,9 +90,9 @@ public class PostsService {
         JSONObject jsonResponse = new JSONObject();
 
         try {
-            List<PostsResponseDto> postsList = postsRepository.findAllDesc().
+            List<PostsListResponseDto> postsList = postsRepository.findAllDesc().
                     stream().
-                    map(PostsResponseDto::new).
+                    map(PostsListResponseDto::new).
                     toList();
 
             if (!postsList.isEmpty()) {
