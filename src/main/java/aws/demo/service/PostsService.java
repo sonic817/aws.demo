@@ -3,7 +3,6 @@ package aws.demo.service;
 import aws.demo.domain.Posts.Posts;
 import aws.demo.domain.Posts.PostsRepository;
 import aws.demo.web.dto.PostsListResponseDto;
-import aws.demo.web.dto.PostsResponseDto;
 import aws.demo.web.dto.PostsSaveRequestDto;
 import aws.demo.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +92,8 @@ public class PostsService {
             List<PostsListResponseDto> postsList = postsRepository.findAllDesc().
                     stream().
                     map(PostsListResponseDto::new).
-                    toList();
+                    collect(Collectors.toList());
+
 
             if (!postsList.isEmpty()) {
                 jsonResponse.put("message", "success");
@@ -101,6 +101,30 @@ public class PostsService {
             } else {
                 jsonResponse.put("message", "success");
                 jsonResponse.put("data", new ArrayList<>());
+            }
+        } catch (Exception e) {
+            jsonResponse.put("message", e.getMessage());
+            jsonResponse.put("data", "");
+        }
+
+        return jsonResponse;
+    }
+
+    @Transactional()
+    public JSONObject delete(Long id) {
+        JSONObject jsonResponse = new JSONObject();
+
+        try {
+            Posts posts = postsRepository.findById(id).orElse(null);
+
+            if (posts != null) {
+                postsRepository.delete(posts);
+
+                jsonResponse.put("message", "success");
+                jsonResponse.put("data", posts);
+            } else {
+                jsonResponse.put("message", "success");
+                jsonResponse.put("data", new HashMap<>());
             }
         } catch (Exception e) {
             jsonResponse.put("message", e.getMessage());

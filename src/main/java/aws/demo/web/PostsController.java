@@ -1,12 +1,10 @@
 package aws.demo.web;
 
 import aws.demo.service.PostsService;
-import aws.demo.web.dto.PostsResponseDto;
 import aws.demo.web.dto.PostsSaveRequestDto;
 import aws.demo.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -29,11 +27,20 @@ public class PostsController {
         return postsService.findById(id);
     }
 
-    @PutMapping("api/v1/posts")
+    @PutMapping("api/v1/posts/{id}")
     public JSONObject update(
-            @RequestParam Long id,
+            @PathVariable Long id,
             @RequestBody PostsUpdateRequestDto requestDto
     ) {
         return postsService.update(id, requestDto);
+    }
+
+
+    @DeleteMapping("api/v1/posts/{id}")
+    public JSONObject delete(
+            @PathVariable Long id
+    ) {
+        JSONObject jsonResponse = postsService.delete(id);
+        return jsonResponse;
     }
 }

@@ -1,16 +1,10 @@
-package aws.demo.config;
+package aws.demo.config.auth;
 
 import aws.demo.domain.user.Role;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -24,9 +18,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .authorizeRequests()
-                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile").permitAll()
-                .antMatchers("/api/v1/**").hasRole(Role.USER.name())
+                .authorizeRequests() // url 별 권한 관리
+                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/profile").permitAll() // 전체 열람 권한
+                .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // USER만 접근 가능
                 .anyRequest().authenticated()
                 .and()
                 .logout()
