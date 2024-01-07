@@ -1,5 +1,6 @@
 package aws.demo.web;
 
+import aws.demo.config.auth.LoginUser;
 import aws.demo.config.auth.dto.SessionUser;
 import aws.demo.domain.Posts.Posts;
 import aws.demo.service.PostsService;
@@ -19,15 +20,15 @@ import java.util.List;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
 
     @GetMapping("")
-    public String index(Model model) {
+    public String index(
+            Model model,
+            @LoginUser SessionUser user
+    ) {
         JSONObject jsonResponse = postsService.findAllDesc();
         List<PostsListResponseDto> PostsList = (List<PostsListResponseDto>) jsonResponse.get("data");
         model.addAttribute("posts", PostsList);
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if (user != null) {
             model.addAttribute("username", user.getName());
